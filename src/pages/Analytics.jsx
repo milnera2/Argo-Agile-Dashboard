@@ -8,7 +8,7 @@ export default function Analytics() {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {['Velocity', 'Hours Logged', 'Tasks Completed'].map((stat, i) => (
+        {['Story Points', 'Hours Logged', 'Tasks Completed'].map((stat, i) => (
           <div key={stat} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{stat}</p>
             <p className="text-3xl font-black text-slate-800 mt-2">{[14, 32, 8][i]}</p>
