@@ -1,2 +1,6 @@
 # Argo-Agile-Dashboard
-Argo - 
+Argo - Smart Agile Dashboard
+
+Created for ASE220.
+
+© 2026
