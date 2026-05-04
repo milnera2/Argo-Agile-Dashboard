@@ -34,5 +34,4 @@ const userSchema = new Schema(
     }
 );
 
-// Check if model exists to prevent re-compilation errors during hot-reloads
 export const UserModel = models.users || model('users', userSchema);
