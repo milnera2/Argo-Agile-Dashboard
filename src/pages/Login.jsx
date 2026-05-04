@@ -11,9 +11,7 @@ export default function Login() {
 
   return (
     <div className="flex h-screen bg-white">
-      {/* Left Side: Brand/Visual Section */}
       <div className="hidden lg:flex w-1/2 bg-argo-secondary relative items-center justify-center overflow-hidden">
-        {/* Subtle decorative background elements */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10">
           <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-argo-primary rounded-full blur-3xl"></div>
           <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-argo-accent rounded-full blur-3xl"></div>
@@ -24,11 +22,11 @@ export default function Login() {
             <Ship size={64} className="text-white" />
           </div>
           <h1 className="text-5xl font-black text-white tracking-tighter mb-4">
-            Project Odyssey
+            ARGO
           </h1>
           <p className="text-slate-400 text-lg font-medium leading-relaxed max-w-md mx-auto">
-            The next generation of modular hardware and AI agent management. 
-            Built for efficiency. Powered by ARGO.
+            The next generation of project management and sprint devlopment. 
+            Built for efficiency. Start your Odyssey.
           </p>
         </div>
       </div>
