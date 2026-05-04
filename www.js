@@ -1,7 +1,9 @@
 import express from "express";
 import ViteExpress from "vite-express";
-
+import createConnection from "./db.js"
 const app = express();
+
+createConnection();
 
 app.get('/api', (req, res) => {
     res.send('Hello World!');
