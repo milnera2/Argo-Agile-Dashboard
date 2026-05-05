@@ -1,84 +1,148 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, BrainCircuit, BarChart3, ShieldCheck, Ship } from 'lucide-react';
 import TaskDetailModal from './TaskDetailModal';
 
 function Layout({ children }) {
-  // 1. Manage state for which sidebar task is being viewed
   const [activeTask, setActiveTask] = useState(null);
+  const [sidebarTasks, setSidebarTasks] = useState([]);
+  const [userRole, setUserRole] = useState(""); // Add state for role
+  const token = localStorage.getItem('authorization');
 
-  // 2. Define the specific tasks for the layout
-  // These are independent of the 'Home' board tasks
-  const sidebarTasks = [
-    { id: 'A', title: 'Task A', stage: 'todo', date: 'MAY 2026', points: '3', owners: 'aaron@milner.fyi', description: 'Core layout infrastructure task A.' },
-    { id: 'B', title: 'Task B', stage: 'dev', date: 'MAY 2026', points: '5', owners: 'aaron@milner.fyi', description: 'Development sprint task B.' },
-    { id: 'C', title: 'Task C', stage: 'qa', date: 'MAY 2026', points: '2', owners: 'aaron@milner.fyi', description: 'Quality assurance review for task C.' },
-    { id: 'D', title: 'Task D', stage: 'done', date: 'MAY 2026', points: '8', owners: 'aaron@milner.fyi', description: 'Finalized deployment for task D.' }
-  ];
+  useEffect(() => {
+    if (!token) return;
 
-  const handleSave = (updated) => {
-    console.log('Task Updated:', updated);
-    setActiveTask(null);
+    const fetchInitialData = async () => {
+      try {
+        // Fetch Tasks
+        const taskRes = await fetch('/api/tasks', { headers: { 'authorization': token } });
+        const taskData = await taskRes.json();
+        setSidebarTasks(Array.isArray(taskData) ? taskData : []);
+
+        // Fetch User Role
+        const userRes = await fetch('/api/user', { headers: { 'authorization': token } });
+        const userData = await userRes.json();
+        setUserRole(userData.role); // Assuming your API returns { role: 'lead' } or { role: 'user' }
+      } catch (err) {
+        console.error("Failed to fetch layout data", err);
+      }
+    };
+
+    fetchInitialData();
+  }, [token]);
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchSidebarTasks = async () => {
+      try {
+        const response = await fetch('/api/tasks', {
+          headers: { 'authorization': token }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Backend returns an array of task objects
+          setSidebarTasks(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch sidebar tasks:", err);
+      }
+    };
+
+    fetchSidebarTasks();
+  }, [token]);
+
+  const handleSave = async (updatedTask) => {
+    try {
+      const response = await fetch(`/api/tasks/${updatedTask._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': token
+        },
+        body: JSON.stringify(updatedTask)
+      });
+
+      if (response.ok) {
+        setSidebarTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+        setActiveTask(null);
+      }
+    } catch (err) {
+      console.error("Error saving task:", err);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: { 'authorization': token }
+      });
+
+      if (response.ok) {
+        setSidebarTasks(prev => prev.filter(t => t._id !== taskId));
+        setActiveTask(null);
+      }
+    } catch (err) {
+      console.error("Error deleting task:", err);
+    }
   };
 
   return (
-    <div className="flex h-screen bg-slate-50">
-      {/* Sidebar - Wireframe Style */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
-        <div className="p-6 flex items-center gap-2 font-bold text-blue-600">
-          <Ship size={24} />
-          <span>ARGO</span>
-        </div>
-        
-        <nav className="flex-1 px-4 space-y-2">
-          <Link to="/dashboard" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
-            <LayoutDashboard size={20} /> Agile Board
-          </Link>
-          <Link to="/ai-consult" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
-            <BrainCircuit size={20} /> AI Story Assist
-          </Link>
-          <Link to="/analytics" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
-            <BarChart3 size={20} /> Analytics
-          </Link>
-          <Link to="/lead" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
-            <ShieldCheck size={20} /> Team Lead
-          </Link>
-        </nav>
-
-        {/* Task List - Only these items trigger the modal */}
-        <div className="p-4 border-t border-slate-100">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase mb-4 px-2">Tasks</h3>
-          <div className="space-y-1 text-sm text-slate-600">
-            {sidebarTasks.map(task => (
-              <div 
-                key={task.id} 
-                onClick={() => setActiveTask(task)}
-                className="p-2 hover:text-blue-600 hover:bg-slate-50 rounded-md cursor-pointer transition-all"
-              >
-                {task.title}
-              </div>
-            ))}
+      <div className="flex h-screen bg-slate-50 overflow-hidden">
+        <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0">
+          <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+              <Ship size={24} />
+            </div>
+            <span className="font-black text-xl tracking-tighter text-slate-800">ARGO</span>
           </div>
-        </div>
-      </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
+          <nav className="flex-1 p-4 space-y-1 font-bold text-slate-500">
+            <Link to="/dashboard" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100 transition-colors">
+              <LayoutDashboard size={20} /> Dashboard
+            </Link>
+            <Link to="/ai-consult" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
+              <BrainCircuit size={20} /> ARGO AI
+            </Link>
+            <Link to="/analytics" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
+              <BarChart3 size={20} /> Analytics
+            </Link>
+            {userRole === 'lead' && (
+                <Link to="/lead" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100 text-blue-600 bg-blue-50/50 border border-blue-100">
+                  <ShieldCheck size={20} /> Team Lead
+                </Link>)}
+          </nav>
 
-      {/* Persistent Detail Modal for Layout Tasks */}
-      <TaskDetailModal 
-        isOpen={!!activeTask} 
-        task={activeTask} 
-        onClose={() => setActiveTask(null)}
-        onSave={handleSave}
-        onDelete={(id) => {
-          console.log('Delete logic for sidebar task:', id);
-          setActiveTask(null);
-        }}
-      />
-    </div>
+          <div className="p-4 border-t border-slate-100">
+            <h3 className="text-xs font-semibold text-slate-400 uppercase mb-4 px-2 tracking-widest">Tasks</h3>
+            <div className="space-y-1 text-sm text-slate-600 max-h-64 overflow-y-auto">
+              {sidebarTasks.map(task => (
+                  <div
+                      key={task._id}
+                      onClick={() => setActiveTask(task)}
+                      className="p-2 hover:text-blue-600 hover:bg-slate-50 rounded-md cursor-pointer transition-all truncate"
+                  >
+                    {task.label}
+                  </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+
+        {/* This modal pops up when activeTask is set by the sidebar click */}
+        <TaskDetailModal
+            isOpen={!!activeTask}
+            task={activeTask}
+            onClose={() => setActiveTask(null)}
+            onSave={handleSave}
+            onDelete={handleDelete}
+        />
+      </div>
   );
 }
 

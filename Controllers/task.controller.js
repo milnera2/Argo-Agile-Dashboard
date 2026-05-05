@@ -1,6 +1,7 @@
 import {TaskModel} from "../Models/task.model.js";
 import {UserModel} from "../Models/user.model.js";
 
+
 async function post_task (req, res)  {
     try {
         const body = req.body;
@@ -70,17 +71,24 @@ async function edit_task (req, res)  {
         if (task==null){
             return res.status(404).send({message: "Task not found"});
         }
-        //if (!task.ownerID.includes(req.user_id)) {
-            //return res.status(403).send({message: "You don't have permission to edit this task."});
-       // }
+        let permitted = false
+        for (let i=0; i<task.ownerID.length; i++){
 
+            if (await UserModel.findOne({email:task.ownerID[i]})){
+
+                permitted = true;
+            }
+        }
+        if (!permitted){
+            return res.status(403).send({message: "no access"})
+        }
         if (!body) {
             return res.status(400).send({message: "Request data must be provided"});
         }
-        console.log("here")
+
         let filter = {_id:req.params.id}
         let data = await TaskModel.findOneAndUpdate(filter, { $set: body }, {returnDocument: "after"});
-        console.log(data)
+
         return res.send(JSON.stringify(data));
     } catch (err) {
         console.error(err);
@@ -94,8 +102,16 @@ async function delete_task (req, res) {
         if (task==null){
             return res.status(404).send({message: "Task not found"});
         }
-        if (task.ownerID !== req.user_id) {
-            return res.status(403).send({message: "You don't have permission to edit this task."});
+        let permitted = false
+        for (let i=0; i<task.ownerID.length; i++){
+
+            if (await UserModel.findOne({email:task.ownerID[i]})){
+
+                permitted = true;
+            }
+        }
+        if (!permitted){
+            return res.status(403).send({message: "no access"})
         }
         let data = await TaskModel.deleteOne({_id:req.params.id});
         console.log(data);

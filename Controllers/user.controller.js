@@ -19,7 +19,7 @@ async function get_user (req, res) {
             return res.status(404).send({message: "User not found"});
         }
         let data = await UserModel.findOne({_id:req.user_id});
-        console.log(data);
+
         return res.send(JSON.stringify(data));
     }
     catch (err) {
@@ -147,7 +147,7 @@ async function edit_user (req, res)  {
         }
         let filter = {_id:req.params.id}
         let data = await UserModel.findOneAndUpdate(filter, { $set: body}, {returnDocument: "after"});
-        console.log(data);
+
         return res.send(JSON.stringify(data));
     } catch (err) {
         console.error(err);
@@ -165,7 +165,7 @@ async function delete_user (req, res) {
             return res.status(403).send({message: "You don't have permission to edit this user."});
         }
         let data = await UserModel.deleteOne({_id:req.params.id});
-        console.log(data);
+
         return res.send(JSON.stringify(data));
     }
     catch (err) {
