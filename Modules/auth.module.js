@@ -47,6 +47,18 @@ async function verifyToken (req, res, next) {
     }
 }
 
+async function verifyLogin (req, res, next) {
+    try{
+        const user = await UserModel.findOne({_id: req.user_id}).exec();
+        if (!user.loggedIn) {
+            return res.status(403).send({message: "Access Denied"});
+        }
+        next();
+    } catch (err) {
+        return res.status(401).send(err);
+    }
+}
+
 async function verifyIsAdmin (req, res, next) {
     try {
         let token = req.headers.authorization;
@@ -73,4 +85,4 @@ async function verifyIsAdmin (req, res, next) {
 
 
 
-export default {createPasswordHash, verifyToken, verifyIsAdmin, verifyPassword};
+export default {createPasswordHash, verifyToken, verifyIsAdmin, verifyPassword, verifyLogin};
