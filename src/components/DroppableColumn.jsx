@@ -23,10 +23,7 @@ export default function DroppableColumn({ col, tasks }) {
             {tasks.map((task) => (
               <TaskCard 
                 key={task.id} 
-                id={task.id}
-                title={task.title}
-                date={task.date}
-                points={task.points}
+                {...task} // This passes id, title, points, owners, and tags automatically
               />
             ))}
           </div>

@@ -1,8 +1,8 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { MoreVertical, Star } from 'lucide-react';
+import { Mail, Tag, Star } from 'lucide-react';
 
-export default function TaskCard({ id, title, date, points }) {
+export default function TaskCard({ id, title, points, owners = [], tags = [] }) {
   const {
     attributes,
     listeners,
@@ -25,28 +25,50 @@ export default function TaskCard({ id, title, date, points }) {
       style={style} 
       {...attributes} 
       {...listeners}
-      className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 group hover:border-blue-600 transition-all cursor-grab active:cursor-grabbing touch-none select-none"
+      className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 group hover:border-blue-600 transition-all cursor-grab active:cursor-grabbing touch-none select-none mb-4"
     >
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="font-bold text-slate-800 leading-snug pr-4">
+      {/* Title */}
+      <div className="mb-4">
+        <h3 className="text-lg font-bold text-slate-800 leading-tight">
           {title}
         </h3>
-        <button className="text-slate-300 group-hover:text-slate-500 transition-colors shrink-0">
-          <MoreVertical size={14}/>
-        </button>
       </div>
 
-      <div className="mt-4 flex justify-between items-center pt-4 border-t border-slate-50">
-        <div className="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-          <Star size={10} className="text-amber-500 fill-amber-500" />
-          <span className="text-[10px] font-black text-slate-600 tracking-tight">
+      {/* Owners Section */}
+      {owners.length > 0 && (
+        <div className="space-y-1.5 mb-4">
+          {owners.map((email, index) => (
+            <div key={index} className="flex items-center gap-2 text-slate-500">
+              <Mail size={12} className="text-slate-400" />
+              <span className="text-xs font-medium truncate">{email}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Star Points Section */}
+      <div className="mb-4">
+        <div className="inline-flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+          <Star size={12} className="text-amber-500 fill-amber-500" />
+          <span className="text-xs font-black text-slate-700 uppercase tracking-tighter">
             {points || 0} PTS
           </span>
         </div>
-        
-        <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">
-          {date}
-        </span>
+      </div>
+
+      {/* Tags Section */}
+      <div className="pt-4 border-t border-slate-100">
+        <div className="flex flex-wrap gap-1.5">
+          {tags.map((tag, i) => (
+            <span 
+              key={i} 
+              className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest bg-slate-100 text-slate-400 px-2.5 py-1 rounded-md border border-slate-200/30"
+            >
+              <Tag size={10} className="opacity-50" />
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
