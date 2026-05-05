@@ -1,5 +1,5 @@
-import UserModel from '../models/user.model.js';
-
+import {UserModel} from '../models/user.model.js';
+import AuthModule from '../Modules/auth.module.js'
 
 async function getAllUsers (req, res) {
     try {
@@ -19,15 +19,14 @@ async function register (req, res) {
             password: req.body.password
         }
 
-        if (!userData.email || !userData.username || !userData.password) {
+        if (!userData.email || !userData.password) {
             return res.status(400).send({message: "Required data must be provided."});
         }
 
         userData.email = userData.email.toLowerCase();
-        userData.username = userData.username.toLowerCase();
-        userData.role = "user";
+        userData.role = "member";
 
-        const existingUser = await UserModel.findOne({$or: [{username: userData.username}, {email: userData.email}]});
+        const existingUser = await UserModel.findOne({email: userData.email});
 
         if (existingUser) {
             return res.send("User already exists");
@@ -54,3 +53,5 @@ async function register (req, res) {
         return res.status(500).send("Something went wrong ")
     }
 }
+
+export default {getAllUsers, register};

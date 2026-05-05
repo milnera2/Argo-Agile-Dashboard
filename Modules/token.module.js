@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const config = require("../configs/configs");
+import jwt from 'jsonwebtoken'
+import {TOKEN_SECRET} from '../Configs/configs.js'
 
 /**
  *
@@ -8,7 +8,7 @@ const config = require("../configs/configs");
  * @returns
  */
 function createAccessToken (payload, duration="") {
-    return jwt.sign(payload, config.TOKEN_SECRET, { expiresIn: duration});
+    return jwt.sign(payload, TOKEN_SECRET, { expiresIn: duration});
 }
 
 /**
@@ -18,12 +18,12 @@ function createAccessToken (payload, duration="") {
  */
 function verifyToken (token) {
     try {
-        return jwt.verify(token, config.TOKEN_SECRET);
+        return jwt.verify(token, TOKEN_SECRET);
     } catch (err) {
         console.log(err)
         throw {message: "Access token is invalid."};
     }
 }
 
-module.exports.createAccessToken = createAccessToken;
-module.exports.verifyToken = verifyToken;
+
+export default {createAccessToken, verifyToken};

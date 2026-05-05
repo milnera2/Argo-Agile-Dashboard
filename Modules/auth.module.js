@@ -1,7 +1,6 @@
-const crypto = require("crypto");
-const TokenModule = require("./token.module");
-const UserModel = require("../models/user.model").UserModel;
-const mongoose = require("mongoose");
+import crypto from 'crypto';
+import TokenModule from './token.module.js';
+import {UserModel} from '../Models/user.model.js';
 
 
 
@@ -71,7 +70,6 @@ async function verifyIsAdmin (req, res, next) {
     }
 }
 
-module.exports.createPasswordHash = createPasswordHash;
-module.exports.verifyPassword = verifyPassword;
-module.exports.verifyToken = verifyToken;
-module.exports.verifyIsAdmin = verifyIsAdmin;
+
+
+export default {createPasswordHash, verifyToken, verifyIsAdmin, verifyPassword};

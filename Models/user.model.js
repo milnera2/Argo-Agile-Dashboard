@@ -32,9 +32,7 @@ const userSchema = new Schema(
         modifiedAt: {
             type: Date,
             default: Date.now
-        },
-        collection: "Users"
-    }
-);
+        }},
+    {collection: "Users"});
 
 export const UserModel = models.users || model('users', userSchema);

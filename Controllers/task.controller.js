@@ -27,8 +27,5 @@ async function post_task (req, res)  {
 
 }
 
-async function test (req, res)  {
-    res.send({message: "test"});
-}
 
-export default { post_task, test };
+export default { post_task };
