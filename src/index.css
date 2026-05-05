@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-argo-primary: #2563eb;
+  --color-argo-secondary: #1e293b;
+  --color-argo-accent: #60a5fa;
+  --color-argo-bg: #f8fafc;
+
+  --radius-argo: 1.25rem;
+
+  --shadow-argo-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-argo-glow: 0 0 15px -3px rgba(37, 99, 235, 0.2);
+}
+
+@layer base {
+  body {
+    @apply bg-argo-bg text-slate-900 antialiased;
+  }
+
+  main {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* For Firefox support */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+
+.drag-active {
+  touch-action: none;
+}
