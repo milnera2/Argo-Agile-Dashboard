@@ -1,81 +1,158 @@
-import { Send, Sparkles, MessageSquareQuote, Zap } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Send, MessageSquareQuote, Zap, User, Bot } from 'lucide-react';
 
 export default function AIConsult() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef(null);
+
+  // Retrieve the existing session token
+  const token = localStorage.getItem('authorization');
+
+  // Automatically scroll to the bottom when new messages are added
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMessage = { role: 'user', content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      // Calls your backend which handles the Gemini API key securely
+      const response = await fetch('/api/ai/consult', {
+        method: 'POST',
+        headers: {
+          'authorization': token
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage]
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.reply) {
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: data.reply
+        }]);
+      } else {
+        throw new Error(data.error || 'No response from JAISON');
+      }
+    } catch (err) {
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        content: `I've lost contact with the orbital station. Please check your connection and try again.${err}`
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="p-6 h-full flex flex-col max-w-6xl mx-auto">
-      {/* Header - Matching your 'JAISON' Branding */}
-      <div className="mb-10 text-center">
-        <h1 className="text-6xl font-black text-slate-800 tracking-tighter mb-2">
-          JAISON
-        </h1>
-        <p className="text-slate-400 font-bold uppercase text-xs tracking-[0.2em]">
-          AI Story Assist
-        </p>
-      </div>
+      <div className="p-6 h-full flex flex-col max-w-6xl mx-auto relative">
+        {/* JAISON Branding Header */}
+        <div className="mb-10 text-center">
+          <h1 className="text-6xl font-black text-slate-800 tracking-tighter mb-2">
+            JAISON
+          </h1>
+          <p className="text-slate-400 font-bold uppercase text-xs tracking-[0.2em]">
+            AI Story Assist
+          </p>
+        </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Main Interaction Area (Left 3 Columns) */}
-        <div className="lg:col-span-3 flex flex-col gap-6">
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 flex-1 flex flex-col relative overflow-hidden">
-            {/* Subtle background decoration */}
-            <div className="absolute top-0 right-0 p-8 opacity-5">
-              <Zap size={120} />
-            </div>
+        {/* Main Chat Interface */}
+        <div className="flex-1 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
 
-            <label className="text-sm font-bold text-slate-500 uppercase mb-6 flex items-center gap-2">
-              <MessageSquareQuote size={18} className="text-blue-500" /> 
-              Tell me about your task!
-            </label>
-            
-            <textarea 
-              className="flex-1 w-full p-6 bg-slate-50 rounded-2xl border border-slate-100 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none resize-none text-lg text-slate-700 transition-all"
-              placeholder="Example: I need to build a login page for my ARGO dashboard using React and Tailwind..."
+          {/* Message History Area */}
+          <div
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar"
+          >
+            {messages.length === 0 && (
+                <div className="h-full flex flex-col items-center justify-center text-slate-300 opacity-40">
+                  <Zap size={48} className="mb-4" />
+                  <p className="font-bold uppercase text-xs tracking-widest text-center">
+                    System Online <br />
+                    <span className="text-[10px] font-medium">Ready to process requirements</span>
+                  </p>
+                </div>
+            )}
+
+            {messages.map((msg, i) => (
+                <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  {/* Avatar Icons */}
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
+                      msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-900 text-blue-400'
+                  }`}>
+                    {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
+                  </div>
+
+                  {/* Message Bubble */}
+                  <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                      msg.role === 'user'
+                          ? 'bg-blue-600 text-white rounded-tr-none'
+                          : 'bg-slate-50 text-slate-700 border border-slate-100 rounded-tl-none'
+                  }`}>
+                    {msg.content}
+                  </div>
+                </div>
+            ))}
+
+            {/* Thinking State Indicator */}
+            {isLoading && (
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-900 flex items-center justify-center">
+                    <Bot size={18} className="text-blue-400 animate-pulse" />
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 rounded-tl-none">
+                    <div className="flex gap-1">
+                      <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+            )}
+          </div>
+
+          {/* Input Bar Section */}
+          <div className="p-6 bg-slate-50 border-t border-slate-100">
+            <div className="relative flex items-center">
+            <textarea
+                rows="1"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Tell me about the task you're planning..."
+                className="w-full pl-6 pr-16 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none resize-none font-medium transition-all shadow-inner"
             />
-            
-            <div className="mt-6 flex justify-end">
-              <button className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-3 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95">
-                <Send size={20} /> 
-                Generate Story
+              <button
+                  onClick={handleSendMessage}
+                  disabled={!input.trim() || isLoading}
+                  className="absolute right-3 p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all active:scale-95 disabled:opacity-50 disabled:bg-slate-400 shadow-lg shadow-blue-200 disabled:shadow-none"
+              >
+                <Send size={20} />
               </button>
             </div>
+            <p className="mt-3 text-[10px] text-slate-400 text-center uppercase font-bold tracking-widest">
+              Jaison utilizes Gemini neural links to assist in story creation
+            </p>
           </div>
-        </div>
-
-        {/* AI Output Panel (Right 1 Column) */}
-        <div className="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl flex flex-col border border-slate-800">
-          <div className="flex items-center gap-2 text-blue-400 mb-8 font-bold uppercase text-xs tracking-widest">
-            <Sparkles size={18} /> AI Suggestion
-          </div>
-          
-          <div className="space-y-8 flex-1">
-            <section>
-              <h3 className="text-slate-500 text-[10px] font-black uppercase mb-2 tracking-widest">Story Title</h3>
-              <p className="text-md font-semibold text-slate-100 leading-tight">
-                Implement Secure User Authentication Flow
-              </p>
-            </section>
-            
-            <section>
-              <h3 className="text-slate-500 text-[10px] font-black uppercase mb-2 tracking-widest">Classification</h3>
-              <div className="flex flex-wrap gap-2 mt-2">
-                <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Frontend</span>
-                <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Auth</span>
-              </div>
-            </section>
-
-            <section className="p-5 bg-white/5 rounded-2xl border border-white/10">
-              <h3 className="text-slate-500 text-[10px] font-black uppercase mb-3 tracking-widest">Proposed Description</h3>
-              <p className="text-xs text-slate-400 leading-relaxed italic">
-                "As a developer, I want a robust login interface so that users can safely access their ARGO project data..."
-              </p>
-            </section>
-          </div>
-
-          <button className="mt-8 w-full bg-white/10 hover:bg-white/20 border border-white/10 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-colors">
-            Confirm to Board
-          </button>
         </div>
       </div>
-    </div>
   );
 }

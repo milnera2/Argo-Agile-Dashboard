@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { X, Plus, Hash, AlignLeft, Tag, Mail, Star } from 'lucide-react';
 
 export default function CreateTaskModal({ isOpen, onClose }) {
-  // Initialize state based on the fields defined in task.model.js
   const [formData, setFormData] = useState({
     label: '',
     description: '',
     points: 0,
     phase: 'todo',
-    ownerID: '', // Will be split into an array before sending
-    tags: ''     // Will be split into an array before sending
+    ownerID: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,10 +26,8 @@ export default function CreateTaskModal({ isOpen, onClose }) {
     setIsLoading(true);
 
     try {
-      // Prepare data to match task.controller.js expectations
       const submissionData = {
         ...formData,
-        // Convert comma-separated strings to arrays
         ownerID: formData.ownerID.split(',').map(email => email.trim()).filter(e => e !== ""),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(t => t !== "")
       };
@@ -48,7 +44,6 @@ export default function CreateTaskModal({ isOpen, onClose }) {
       });
 
       if (response.ok) {
-        // Reset form and close modal on success
         setFormData({
           label: '',
           description: '',
@@ -58,7 +53,6 @@ export default function CreateTaskModal({ isOpen, onClose }) {
           tags: ''
         });
         onClose();
-        // Typically you would trigger a refresh of the board here
         window.location.reload();
       } else {
         const errorData = await response.json();
@@ -115,7 +109,6 @@ export default function CreateTaskModal({ isOpen, onClose }) {
                 </div>
               </div>
 
-              {/* Owners maps to 'ownerID' array in Model */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                   Owners (Comma separated emails)

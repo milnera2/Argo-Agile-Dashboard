@@ -27,8 +27,7 @@ export default function CreateAccountModal({ isOpen, onClose }) {
       const data = await response.json();
 
       if (response.ok) {
-        // If your API returns a token immediately on registration:
-        // Reset form and close
+
         setFormData({ email: '', password: '' });
         onClose();
         window.location.href = '/';

@@ -4,7 +4,7 @@ import TaskCard from './TaskCard';
 
 export default function DroppableColumn({ col, tasks }) {
     const { setNodeRef } = useDroppable({ id: col.id });
-    const taskIds = tasks.map(t => t._id); // Use MongoDB _id
+    const taskIds = tasks.map(t => t._id);
 
     return (
         <div className="flex flex-col min-h-[70vh]">

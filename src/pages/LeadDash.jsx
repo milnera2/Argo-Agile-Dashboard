@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Activity, ChevronRight } from 'lucide-react';
+import { Users, Activity } from 'lucide-react';
 
 export default function LeadDash() {
   const [tasks, setTasks] = useState([]);
@@ -25,12 +25,10 @@ export default function LeadDash() {
     fetchTasks();
   }, [token]);
 
-  // Calculate Distribution Logic
   const completedCount = tasks.filter(t => t.phase === 'done').length;
   const uncompletedCount = tasks.filter(t => t.phase !== 'done').length;
   const totalTasks = tasks.length;
 
-  // Prevent division by zero
   const completionPercentage = totalTasks > 0
       ? Math.round((completedCount / totalTasks) * 100)
       : 0;
@@ -46,7 +44,6 @@ export default function LeadDash() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Open Tasks List - Displaying first 5 uncompleted tasks */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-slate-700">Open Tasks</h2>
@@ -56,9 +53,8 @@ export default function LeadDash() {
             </div>
             <div className="space-y-3">
               {tasks.filter(t => t.phase !== 'done').slice(0, 5).map((task) => (
-                  <div key={task._id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 group hover:border-blue-200 cursor-pointer transition">
+                  <div key={task._id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 transition">
                     <span className="text-sm font-medium text-slate-600 truncate mr-2">{task.label}</span>
-                    <ChevronRight size={16} className="text-slate-400 group-hover:text-blue-500 shrink-0" />
                   </div>
               ))}
               {uncompletedCount === 0 && (
@@ -67,11 +63,9 @@ export default function LeadDash() {
             </div>
           </div>
 
-          {/* Circular Analytics - Dynamic Distribution */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center">
             <h2 className="font-bold text-slate-700 w-full mb-4">Task Distribution</h2>
             <div className="relative w-48 h-48 flex items-center justify-center">
-              {/* Background Circle */}
               <svg className="w-full h-full transform -rotate-90">
                 <circle
                     cx="96"
@@ -82,7 +76,6 @@ export default function LeadDash() {
                     fill="transparent"
                     className="text-slate-100"
                 />
-                {/* Progress Circle */}
                 <circle
                     cx="96"
                     cy="96"

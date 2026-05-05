@@ -47,7 +47,6 @@ export default function TaskDetailModal({
   };
 
   const handleSave = () => {
-    // Prepare the object for the database (convert tags back to array)
     const submission = {
       ...editedTask,
       tags: typeof editedTask.tags === 'string'

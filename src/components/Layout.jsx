@@ -102,9 +102,6 @@ function Layout({ children }) {
             <Link to="/dashboard" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100 transition-colors">
               <LayoutDashboard size={20} /> Dashboard
             </Link>
-            <Link to="/ai-consult" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
-              <BrainCircuit size={20} /> ARGO AI
-            </Link>
             <Link to="/analytics" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-100">
               <BarChart3 size={20} /> Analytics
             </Link>

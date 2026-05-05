@@ -28,7 +28,7 @@ const COLUMNS = [
 export default function Home() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // Controls user dropdown
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [userEmail, setUserEmail] = useState("");
   const token = localStorage.getItem('authorization');
@@ -61,7 +61,6 @@ export default function Home() {
 
     fetchData();
 
-    // Listen for global refresh signals from the Layout sidebar/modal
     const handleGlobalRefresh = () => fetchData();
     window.addEventListener('taskUpdated', handleGlobalRefresh);
 
@@ -73,7 +72,7 @@ export default function Home() {
   const handleLogout = async () => {
     try {
       const response = await fetch('/api/logout', {
-        method: 'POST', // or 'GET' depending on your backend
+        method: 'POST',
         headers: {
           'authorization': token,
           'Content-Type': 'application/json'
