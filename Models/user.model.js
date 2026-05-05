@@ -22,6 +22,11 @@ const userSchema = new Schema(
             default: 'member',
             required: true
         },
+        loggedIn:{
+            type: Boolean,
+            default: false,
+            required: true
+        },
         tasks: {
             type: Array,
         },

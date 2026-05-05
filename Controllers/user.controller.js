@@ -57,7 +57,6 @@ async function register (req, res) {
 
         userData.passwordHash = encrypted_password.hash;
         userData.passwordSalt = encrypted_password.salt;
-
         delete userData.password;
 
         const createdUser = await UserModel.create(userData);
@@ -106,13 +105,32 @@ async function login (req, res) {
             "user_id": existingUser._id.toString()
         }
 
-        const token = TokenModule.createAccessToken(payload, "30d");
-
+        const token = TokenModule.createAccessToken(payload, "1d");
+        await UserModel.findOneAndUpdate({_id:existingUser._id}, {loggedIn:true}, {returnDocument:"after"})
         return res.send({message: "Logged in  Successfully", access_token: token, user_id: payload.user_id});
     } catch (err) {
         console.log(err);
         return res.status(500).send("Something went wrong ")
     }
+}
+
+async function logout (req, res)  {
+    try {
+
+
+        let user = await UserModel.findOne({_id:req.user_id})
+        if (user==null){
+            return res.status(404).send({message: "User not found"});
+        }
+        let filter = {_id:req.user_id}
+        let data = await UserModel.findOneAndUpdate(filter, { $set: {loggedIn:false}}, {returnDocument: "after"});
+        console.log(data);
+        return res.send(JSON.stringify(data));
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({message: "Something went wrong"});
+    }
+
 }
 
 async function edit_user (req, res)  {
@@ -158,4 +176,4 @@ async function delete_user (req, res) {
         return res.status(500).send({message: "Something went wrong"});
     }
 }
-export default {getAllUsers, register, login, edit_user, delete_user, get_user};
+export default {getAllUsers, register, login, edit_user, delete_user, get_user, logout};

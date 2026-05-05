@@ -5,24 +5,26 @@ import express from 'express';
 
 const router = express.Router();
 
-router.post("/tasks", AuthModule.verifyToken, taskController.post_task)
+router.post("/tasks", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.post_task)
 
 router.post("/register", userController.register)
 
 router.post("/login", userController.login)
 
-router.get("/tasks", AuthModule.verifyToken, taskController.get_tasks)
+router.post("/logout", AuthModule.verifyToken, AuthModule.verifyLogin, userController.logout)
 
-router.put("/tasks/:id", AuthModule.verifyToken, taskController.edit_task)
+router.get("/tasks", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.get_tasks)
 
-router.put("/users/:id", AuthModule.verifyToken, userController.edit_user)
+router.put("/tasks/:id", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.edit_task)
 
-router.delete("/tasks/:id", AuthModule.verifyToken, taskController.delete_task)
+router.put("/users/:id", AuthModule.verifyToken, AuthModule.verifyLogin, userController.edit_user)
 
-router.delete("/users/:id", AuthModule.verifyToken, userController.delete_user)
+router.delete("/tasks/:id", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.delete_task)
 
-router.get("/users/:id", AuthModule.verifyToken, userController.get_user)
+router.delete("/users/:id", AuthModule.verifyToken, AuthModule.verifyLogin, userController.delete_user)
 
-router.get("/tasks/:id", AuthModule.verifyToken, taskController.get_task)
+router.get("/users/:id", AuthModule.verifyToken, AuthModule.verifyLogin, userController.get_user)
+
+router.get("/tasks/:id", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.get_task)
 
 export default router;
