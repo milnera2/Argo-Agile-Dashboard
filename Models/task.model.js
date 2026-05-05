@@ -19,6 +19,10 @@ const TaskSchema = new Schema({
         type: String,
         enum: ["not started", "in progress", "QA", "complete"],
     },
+    ownerID:{
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

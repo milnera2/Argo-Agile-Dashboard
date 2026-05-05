@@ -36,8 +36,9 @@ async function verifyToken (req, res, next) {
         const verified = TokenModule.verifyToken(token);
 
         req.user_id = verified.user_id;
+
         const user = await UserModel.findOne({_id: verified.user_id}).exec();
-        if (!user || !user.active) {
+        if (!user) {
             return res.status(403).send({message: "Access Denied"});
         }
         next();

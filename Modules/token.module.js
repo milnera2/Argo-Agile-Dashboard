@@ -18,6 +18,7 @@ function createAccessToken (payload, duration="") {
  */
 function verifyToken (token) {
     try {
+
         return jwt.verify(token, TOKEN_SECRET);
     } catch (err) {
         console.log(err)
