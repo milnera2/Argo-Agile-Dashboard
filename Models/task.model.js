@@ -20,8 +20,11 @@ const TaskSchema = new Schema({
         enum: ["todo", "dev", "qa", "done"],
     },
     ownerID:{
-        type: String,
+        type: Array,
         required: true
+    },
+    tags:{
+        type: Array
     },
     createdAt: {
         type: Date,

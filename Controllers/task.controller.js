@@ -15,8 +15,13 @@ async function post_task (req, res)  {
             return res.status(400).send({message: "Request data must be provided and in correct format"});
         }
 
-        body.ownerID = req.user_id
+
+
         const user = await UserModel.findOne({_id:req.user_id})
+        body.ownerID = [ user.email ]
+        for (let email in body.email){
+            body.ownerID.push(email)
+        }
         let tasks = user.tasks
         let data = await TaskModel.insertOne(body);
         tasks.push(data._id)
