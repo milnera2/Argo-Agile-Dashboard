@@ -23,7 +23,7 @@ router.delete("/tasks/:id", AuthModule.verifyToken, AuthModule.verifyLogin, task
 
 router.delete("/users/:id", AuthModule.verifyToken, AuthModule.verifyLogin, userController.delete_user)
 
-router.get("/users/:id", AuthModule.verifyToken, AuthModule.verifyLogin, userController.get_user)
+router.get("/user", AuthModule.verifyToken, AuthModule.verifyLogin, userController.get_user)
 
 router.get("/tasks/:id", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.get_task)
 

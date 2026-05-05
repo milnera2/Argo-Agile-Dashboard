@@ -17,7 +17,7 @@ const TaskSchema = new Schema({
     },
     phase: {
         type: String,
-        enum: ["not started", "in progress", "QA", "complete"],
+        enum: ["todo", "dev", "qa", "done"],
     },
     ownerID:{
         type: String,

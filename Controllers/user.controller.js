@@ -14,14 +14,11 @@ async function getAllUsers (req, res) {
 
 async function get_user (req, res) {
     try {
-        let user = await UserModel.findOne({_id:req.params.id})
+        let user = await UserModel.findOne({_id:req.user_id})
         if (user==null){
             return res.status(404).send({message: "User not found"});
         }
-        if (user.ownerID !== req.user_id) {
-            return res.status(403).send({message: "You don't have permission to edit this user."});
-        }
-        let data = await UserModel.findOne({_id:req.params.id});
+        let data = await UserModel.findOne({_id:req.user_id});
         console.log(data);
         return res.send(JSON.stringify(data));
     }
