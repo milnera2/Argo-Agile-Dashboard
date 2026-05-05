@@ -1,5 +1,5 @@
 # Argo-Agile-Dashboard
-Argo - Smart Agile Dashboard
+Argo - Agile Dashboard
 
 Created for ASE220.
 
