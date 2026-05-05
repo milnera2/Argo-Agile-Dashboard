@@ -12,6 +12,25 @@ async function getAllUsers (req, res) {
     }
 }
 
+async function get_user (req, res) {
+    try {
+        let user = await UserModel.findOne({_id:req.params.id})
+        if (user==null){
+            return res.status(404).send({message: "User not found"});
+        }
+        if (user.ownerID !== req.user_id) {
+            return res.status(403).send({message: "You don't have permission to edit this user."});
+        }
+        let data = await UserModel.findOne({_id:req.params.id});
+        console.log(data);
+        return res.send(JSON.stringify(data));
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).send({message: "Something went wrong"});
+    }
+}
+
 async function register (req, res) {
     try {
 
@@ -105,6 +124,9 @@ async function edit_user (req, res)  {
             return res.status(400).send({message: "Request data must be provided"});
         }
         let user = await UserModel.findOne({_id:req.params.id})
+        if (user==null){
+            return res.status(404).send({message: "User not found"});
+        }
         if (user.ownerID !== req.user_id) {
             return res.status(403).send({message: "You don't have permission to edit this user."});
         }
@@ -120,8 +142,11 @@ async function edit_user (req, res)  {
 }
 async function delete_user (req, res) {
     try {
-        let task = await UserModel.findOne({_id:req.params.id})
-        if (task.ownerID !== req.user_id) {
+        let user = await UserModel.findOne({_id:req.params.id})
+        if (user==null){
+            return res.status(404).send({message: "User not found"});
+        }
+        if (user.ownerID !== req.user_id) {
             return res.status(403).send({message: "You don't have permission to edit this user."});
         }
         let data = await UserModel.deleteOne({_id:req.params.id});
@@ -133,4 +158,4 @@ async function delete_user (req, res) {
         return res.status(500).send({message: "Something went wrong"});
     }
 }
-export default {getAllUsers, register, login, edit_user, delete_user};
+export default {getAllUsers, register, login, edit_user, delete_user, get_user};

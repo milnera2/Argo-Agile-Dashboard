@@ -19,6 +19,10 @@ router.put("/users/:id", AuthModule.verifyToken, userController.edit_user)
 
 router.delete("/tasks/:id", AuthModule.verifyToken, taskController.delete_task)
 
-router.delete("/users/:id", AuthModule.verifyToken, userController.delete_task)
+router.delete("/users/:id", AuthModule.verifyToken, userController.delete_user)
+
+router.get("/users/:id", AuthModule.verifyToken, userController.get_user)
+
+router.get("/tasks/:id", AuthModule.verifyToken, taskController.get_task)
 
 export default router;

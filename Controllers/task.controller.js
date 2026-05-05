@@ -41,10 +41,29 @@ async function get_tasks (req, res) {
 
 }
 
+async function get_task (req, res) {
+    try {
+        console.log(req.params.id);
+        let data = await TaskModel.findOne({_id:req.params.id});
+        if (data==null){
+            return res.status(404).send({message: "Task not found"});
+        }
+        console.log(data);
+        return res.send(JSON.stringify(data));
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).send({message: "Something went wrong"});
+    }
+}
+
 async function edit_task (req, res)  {
     try {
         const body = req.body;
         let task = await TaskModel.findOne({_id:req.params.id})
+        if (task==null){
+            return res.status(404).send({message: "Task not found"});
+        }
         if (task.ownerID !== req.user_id) {
             return res.status(403).send({message: "You don't have permission to edit this task."});
         }
@@ -64,6 +83,9 @@ async function edit_task (req, res)  {
 async function delete_task (req, res) {
     try {
         let task = await TaskModel.findOne({_id:req.params.id})
+        if (task==null){
+            return res.status(404).send({message: "Task not found"});
+        }
         if (task.ownerID !== req.user_id) {
             return res.status(403).send({message: "You don't have permission to edit this task."});
         }
@@ -76,4 +98,4 @@ async function delete_task (req, res) {
         return res.status(500).send({message: "Something went wrong"});
     }
 }
-export default { post_task, get_tasks, edit_task, delete_task };
+export default { post_task, get_tasks, edit_task, delete_task, get_task };
