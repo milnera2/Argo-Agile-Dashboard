@@ -7,8 +7,4 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  server: {
-    fs: {
-      allow: ['src', 'public']
-    }}
 })
