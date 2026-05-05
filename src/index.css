@@ -36,16 +36,20 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0; /* slate-200 */
+  background: #e2e8f0;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1; /* slate-300 */
+  background: #cbd5e1;
 }
 
 /* For Firefox support */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #e2e8f0 transparent;
+}
+
+.drag-active {
+  touch-action: none;
 }
