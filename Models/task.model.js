@@ -11,11 +11,15 @@ const TaskSchema = new Schema({
         type: String,
         trim: true,
     },
+    points:{
+        type: Number,
+        required: true,
+    },
     phase: {
         type: String,
         enum: ["not started", "in progress", "QA", "complete"],
     },
-    ownerID: {
+    ownerID:{
         type: String,
         required: true
     },
@@ -27,6 +31,7 @@ const TaskSchema = new Schema({
         type: Date,
         default: Date.now
     }
-});
+},
+    {collection:"Tasks"});
 
 export const TaskModel = models.tasks || model('tasks', TaskSchema);
