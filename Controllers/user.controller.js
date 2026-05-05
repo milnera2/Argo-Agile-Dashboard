@@ -1,6 +1,7 @@
 import {UserModel} from '../models/user.model.js';
 import AuthModule from '../Modules/auth.module.js'
 import TokenModule from '../Modules/token.module.js'
+import {TaskModel} from "../Models/task.model.js";
 async function getAllUsers (req, res) {
     try {
         const data = await UserModel.find({}).exec();
@@ -103,7 +104,10 @@ async function edit_user (req, res)  {
         if (!body) {
             return res.status(400).send({message: "Request data must be provided"});
         }
-
+        let user = await UserModel.findOne({_id:req.params.id})
+        if (user.ownerID !== req.user_id) {
+            return res.status(403).send({message: "You don't have permission to edit this user."});
+        }
         let filter = {_id:req.params.id}
         let data = await UserModel.findOneAndUpdate(filter, { $set: body}, {returnDocument: "after"});
         console.log(data);
@@ -114,5 +118,19 @@ async function edit_user (req, res)  {
     }
 
 }
-
-export default {getAllUsers, register, login};
+async function delete_user (req, res) {
+    try {
+        let task = await UserModel.findOne({_id:req.params.id})
+        if (task.ownerID !== req.user_id) {
+            return res.status(403).send({message: "You don't have permission to edit this user."});
+        }
+        let data = await UserModel.deleteOne({_id:req.params.id});
+        console.log(data);
+        return res.send(JSON.stringify(data));
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).send({message: "Something went wrong"});
+    }
+}
+export default {getAllUsers, register, login, edit_user, delete_user};
