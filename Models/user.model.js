@@ -3,7 +3,7 @@ const { Schema, model, models } = mongoose;
 
 const userSchema = new Schema(
     {
-        username: {
+        email: {
             type: String,
             required: true,
             unique: true
@@ -18,9 +18,12 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
+            enum: ['member', 'lead'],
+            default: 'member',
             required: true
+        },
+        tasks: {
+            type: Array,
         },
         createdAt: {
             type: Date,
@@ -30,7 +33,7 @@ const userSchema = new Schema(
             type: Date,
             default: Date.now
         },
-        collection: 'Users'
+        collection: "Users"
     }
 );
 

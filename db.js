@@ -3,8 +3,8 @@ import { connect } from 'mongoose'
 
 // Build Connection URI
 import {DB_USER, DB_PASS} from './Configs/configs.js'
-console.log(DB_USER, DB_PASS);
-const CONN_URI = `mongodb+srv://${DB_USER}:${DB_PASS}@ase220.fuj5ad5.mongodb.net/?appName=ASE220`;
+
+const CONN_URI = `mongodb+srv://${DB_USER}:${DB_PASS}@ase220.fuj5ad5.mongodb.net/Argo?appName=ASE220`;
 
 // Init the driver
 
