@@ -18,9 +18,11 @@ Argo is an Agile dashboard built around user experience. This project is focused
 - Mongo DB
 
 ### Setup and Run Instructions
-
-Configuration notes required to run the project
-Test credentials for authenticated users
+TODO:put installs and instructions
+#### Configuration notes required to run the project
+TODO: config setup
+#### Test credentials for authenticated users
+TODO test credentials
 
 ### MVPs
 - Editable Agile Board
@@ -28,6 +30,8 @@ Test credentials for authenticated users
 - User Friendly Story Creation
 
 ### API Documentation
+TODO: add documentation
+
 Comprehensive REST API documentation that includes
 API path
 HTTP method
