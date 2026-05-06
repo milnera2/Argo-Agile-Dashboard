@@ -18,6 +18,7 @@ Argo is an Agile dashboard built around user experience. This project is focused
 - Mongo DB
 
 ### Setup and Run Instructions
+
 TODO:put installs and instructions
 #### Configuration notes required to run the project
 TODO: config setup
@@ -30,14 +31,19 @@ TODO test credentials
 - User Friendly Story Creation
 
 ### API Documentation
-TODO: add documentation
 
-Comprehensive REST API documentation that includes
-API path
-HTTP method
-purpose of the endpoint
-required input parameters or request body
-example request
-example response
-authentication/authorization requirement (if applicable)
-possible error responses/status codes
+
+
+| Method  | Path               | Purpose             | request body         | auth requirement | error codes   |
+|---------|--------------------|---------------------|----------------------|------------------|---------------|
+| POST    | /api/tasks         | create at task      | label, points, phase | none             | 403, 400, 500 |
+| POST    | /api/register      | create a user       | email, password      | none             | 400, 500      |
+| POST    | /api/login         | authenticate a user | email, password      | none             | 400, 404, 500 |
+| POST    | /api/logout        | log a user out      | none                 | member           | 403, 500      |
+| GET     | /api/tasks         | get all tasks       | none                 | member           | 403, 500      |
+| GET     | /api/user          | get current user    | none                 | member           | 404, 500      |
+| GET     | /api/tasks/:id     | get a task by ID    | none                 | member           | 400, 404, 500 |
+| PUT     | /api/tasks/:id     | edit a task         | any task fields      | member           | 400, 404, 500 |
+| PUT     | /api/users/:id     | edit a user         | email                | member           | 400, 404, 500 |
+| DELETE  | /api/tasks/:id     | delete a task       | none                 | member           | 400, 404, 500 |
+| DELETE  | /api/users/:id     | delete a user       | none                 | member           | 400, 404, 500 |
