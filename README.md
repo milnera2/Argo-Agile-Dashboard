@@ -1,17 +1,39 @@
 # Argo-Agile-Dashboard
-Argo - Agile Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Overview
+Argo is an Agile dashboard built around user experience. This project is focused on making an application that streamlines Agile board processes to allow for easy team organization both from a team member but also a team lead perspective. Each user is provided with their own analytics page that displays their personal metrics for total tasks completed and shows any open tasks. Team leads are also provided with a lead dashboard showing the metrics for the whole team. These measurements of progress are crucial to keeping the team on track and aware of progress. The home page provides an easy to use agile board that allows for drag & drop reorganization and movement for task stages. On the side focused layout there are easily accessible controls to edit and/or delete current tasks which allows for adjustments. All accounts are based on emails which allows for easily manageable teams and project assignments. The design focuses on creating a user-friendly workflow that will integrate with any team. 
 
-Currently, two official plugins are available:
+### Made by: Aaron Milner & Eurydice Lunnemann 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+###  [Video Link](http://example.com)
 
-## React Compiler
+### Technologies Used
+- Vite
+- React
+- Tailwind
+- Lucid
+- Dnd
+- Express
+- Mongoose
+- Mongo DB
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Setup and Run Instructions
 
-## Expanding the ESLint configuration
+Configuration notes required to run the project
+Test credentials for authenticated users
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### MVPs
+- Editable Agile Board
+- Analytics for Team Leads
+- User Friendly Story Creation
+
+### API Documentation
+Comprehensive REST API documentation that includes
+API path
+HTTP method
+purpose of the endpoint
+required input parameters or request body
+example request
+example response
+authentication/authorization requirement (if applicable)
+possible error responses/status codes
