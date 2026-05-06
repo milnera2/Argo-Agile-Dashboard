@@ -1,15 +1,13 @@
 import taskController from '../Controllers/task.controller.js'
 import userController from '../Controllers/user.controller.js'
 import AuthModule from '../Modules/auth.module.js'
-import {GoogleGenerativeAI}  from "@google/generative-ai"
-import {GEMINI_KEY} from "../Configs/configs.js"
 import express from 'express';
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const genAI = new GoogleGenerativeAI(GEMINI_KEY);
+
 const router = express.Router();
 
 router.post("/tasks", AuthModule.verifyToken, AuthModule.verifyLogin, taskController.post_task)

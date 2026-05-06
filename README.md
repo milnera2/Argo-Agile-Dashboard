@@ -18,13 +18,18 @@ Argo is an Agile dashboard built around user experience. This project is focused
 - Mongo DB
 
 ### Setup and Run Instructions
-
-TODO:put installs and instructions
+- run "npm install"
+- run "npm run dev"
 #### Configuration notes required to run the project
-TODO: config setup
+- change the "Configs-Example" directory to "Configs"
+- add your configuration in the "configs.js" file
 #### Test credentials for authenticated users
-TODO test credentials
-
+- To get a user with member authentication
+  - run the application
+  - press "create one" in the login screen
+- To get a user with member authentication
+  - run the "seedLead.js" file
+  - this will create a lead user with credentials email:"example@admin.com" and password:"admin"
 ### MVPs
 - Editable Agile Board
 - Analytics for Team Leads
