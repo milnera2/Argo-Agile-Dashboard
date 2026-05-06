@@ -5,7 +5,7 @@ Argo is an Agile dashboard built around user experience. This project is focused
 
 ### Made by: Aaron Milner & Eurydice Lunnemann 
 
-###  [Video Link](http://example.com)
+###  [Video Link](https://somup.com/cOh1exVVq88)
 
 ### Technologies Used
 - Vite
